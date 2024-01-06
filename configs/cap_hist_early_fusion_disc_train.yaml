@@ -1,0 +1,69 @@
+# dataset reader arguments
+dataset:
+  data_dir: '/home/data/visdial_v1.0_test-std/'
+
+  image_features_train_h5: '/home/data/visdial_v1.0_test-std/features_faster_rcnn_x101_train.h5'
+  image_features_val_h5: '/home/data/visdial_v1.0_test-std/features_faster_rcnn_x101_val.h5'
+  image_features_test_h5: '/home/data/visdial_v1.0_test-std/features_faster_rcnn_x101_test.h5'
+
+  train_json: '/home/data/visdial_v1.0_test-std/visdial_1.0_train.json'
+  val_json: '/home/data/visdial_v1.0_test-std/visdial_1.0_val.json'
+  test_json: '/home/data/visdial_v1.0_test-std/visdial_1.0_test.json'
+  train_dense_json: '/home/data/visdial_v1.0_test-std/visdial_1.0_train_dense_annotations.json'
+  val_dense_json: '/home/data/visdial_v1.0_test-std/visdial_1.0_val_dense_annotations.json'
+
+  word_counts_json: '/home/data/visdial_v1.0_test-std/visdial_1.0_word_counts_train.json'
+  glove_npy: '/home/data/visdial_v1.0_test-std/glove.npy'
+
+# model related arguments
+model:
+  encoder: 'cap_hist_early_fusion'
+  decoder: 'disc'
+
+  img_feature_size: 2048
+  word_embedding_size: 300
+  lstm_hidden_size: 512
+  lstm_num_layers: 1
+  dropout: 0.2
+
+  img_norm: 1
+  max_cap_sequence_length: 40
+  max_sequence_length: 20
+  vocab_min_count: 5
+
+  dense_regression: False # whether to use regression instead of classification for dense annotations
+
+  cfq_interval: 10 # -1 represent not using cf
+  cfi_interval: -1
+  lambda_cfq: -1
+  lambda_cfi: -1
+
+# optimization related arguments
+solver:
+  batch_size: 12
+  eval_batch_size: 24
+  num_epochs: 15
+  num_epochs_curriculum: 20
+  initial_lr: 0.0005
+  initial_lr_curriculum: 0.0001
+  min_lr: 0.000005
+  training_splits: 'train'
+  lr_gamma: 0.2
+  lr_milestones:
+    - 7
+    - 10
+  warmup_factor: 0.2
+  warmup_epochs: 1
+
+# checkpointing related arguments
+checkpointing:
+  load_path: ''
+  load_finetune_path: ''
+  phase: 'both' # training, finetuning, both, or dense_scratch_train
+
+# experiment reproducibility related arguments
+reproducibility:
+  cpu_workers: 4 # number of cpu workers for dataloader
+  overfit: True # overfit model on 10 examples, meant for debugging
+  validate: True # whether to validate on val split after every epoch
+  pin_memory: True # load the whole dataset and pre-extracted image features in memory, use only in presence of large ram, at least few tens of GBs

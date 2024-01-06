@@ -1,0 +1,46 @@
+# dataset reader arguments
+dataset:
+  data_dir: '/home/data/visdial_v1.0_test-std/'
+
+  image_features_train_h5: '/home/data/visdial_v1.0_test-std/features_faster_rcnn_x101_train.h5'
+  image_features_val_h5: '/home/data/visdial_v1.0_test-std/features_faster_rcnn_x101_val.h5'
+  image_features_test_h5: '/home/data/visdial_v1.0_test-std/features_faster_rcnn_x101_test.h5'
+
+  val_json: 'subsets/visdialconv/visdial_1.0_val_crowdsourced.json'
+  val_dense_json: 'subsets/visdialconv/visdial_1.0_val_dense_annotations_crowdsourced.json'
+
+  word_counts_json: '/home/data/visdial_v1.0_test-std/visdial_1.0_word_counts_train.json'
+  glove_npy: '/home/data/visdial_v1.0_test-std/glove.npy'
+
+# model related arguments
+model:
+  encoder: 'cap_hist_early_fusion'
+  decoder: 'disc'
+
+  img_feature_size: 2048
+  word_embedding_size: 300
+  lstm_hidden_size: 512
+  lstm_num_layers: 1
+  dropout: 0.2
+
+  img_norm: 1
+  max_cap_sequence_length: 40
+  max_sequence_length: 20
+  vocab_min_count: 5
+
+# optimization related arguments
+solver:
+  batch_size: 4
+  split: 'val' # val or test
+
+# checkpointing related arguments
+checkpointing:
+  load_path: '/home/luchenyu/dvd/ckpt/val/finetune/71.93-PAF-2-4-1-Q-10-1.pth'
+
+# experiment reproducibility related arguments
+reproducibility:
+  cpu_workers: 3 # number of cpu workers for dataloader
+  overfit: False # overfit model on 5 examples, meant for debugging
+  pin_memory: False # load the whole dataset and pre-extracted image features in memory, use only in presence of large ram, at least few tens of GBs
+  gpu_ids:
+    - 1
